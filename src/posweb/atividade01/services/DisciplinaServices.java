@@ -62,7 +62,7 @@ public class DisciplinaServices {
 			}
 		}
 		
-		if(alunoPertenceAoCurso) {
+		if(!alunoPertenceAoCurso) {
 			throw new Exception("A Disciplina não está vinculada ao curso do aluno");
 		}
 	}
