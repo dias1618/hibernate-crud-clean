@@ -111,6 +111,7 @@ public class DisciplinaCRUD {
 		List<Integer> tipos = new ArrayList<Integer>();
 		tipos.add(SituacaoDisciplinaEnum.EM_CURSO.getKey());
 		tipos.add(SituacaoDisciplinaEnum.TRANCADO.getKey());
+		tipos.add(SituacaoDisciplinaEnum.REPROVADO.getKey());
 		return tipos;
 	}
 	
