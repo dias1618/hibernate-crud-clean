@@ -1,4 +1,4 @@
-package posweb.atividade01.daos;
+package posweb.atividade01.cruds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,45 +104,4 @@ public class CursoCRUD {
 		}		
 	}
 	
-	public static boolean cursoHasDisciplina(Integer idCurso, Integer idDisciplina) {
-		Curso curso = buscar(idCurso);
-		for(Disciplina disciplina : curso.getDisciplinas()) {
-			if(disciplina.getId() == idDisciplina) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public static String addDisciplina(int cursoId, int disciplinaId) {
-		Session session = SessionHibernate.getInstance().openSession();
-		Transaction tx = null;
-		  
-		try {
-		   tx = session.beginTransaction();
-		   Curso curso = (Curso)session.get(Curso.class, cursoId);
-		   if(curso == null) {
-			   return "Curso não encontrado";
-		   }
-		   Disciplina disciplina = (Disciplina)session.get(Disciplina.class, disciplinaId);
-		   if(disciplina == null) {
-			   return "Disciplina não encontrada";
-		   }
-		   curso.addDisciplina(disciplina);
-		   session.persist(curso);
-		   
-		   tx.commit();
-		   
-		   return "Disciplina adicionada com sucesso";
-		} catch (HibernateException e) {
-		   if (tx!=null) tx.rollback();
-		   e.printStackTrace(); 
-		   return "Erro ao adicionar disciplina";
-		} finally {
-		   session.close(); 
-		}
-	}
-	
-
 }

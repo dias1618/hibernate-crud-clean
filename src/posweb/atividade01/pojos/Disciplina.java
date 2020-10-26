@@ -94,7 +94,7 @@ public class Disciplina {
 	
 	@Override
 	public String toString() {
-		return "Disciplina [id=" + id + ", nome=" + nome+ ", alunos="+getListAlunos()+"]";
+		return "Disciplina [id=" + id + ", nome=" + nome+"]";
 	}
 	
 	

@@ -10,12 +10,12 @@ public class AlunoDisciplina implements Serializable{
 	private static final long serialVersionUID = 5883196118410235190L;
 
 	@Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="idAluno")
     private Aluno aluno;
  
 	@Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="idDisciplina")
     private Disciplina disciplina;
 

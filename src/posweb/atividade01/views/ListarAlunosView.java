@@ -1,24 +1,17 @@
 package posweb.atividade01.views;
 
-import java.util.List;
-
 import javax.swing.JOptionPane;
 
-import posweb.atividade01.daos.AlunoCRUD;
 import posweb.atividade01.interfaces.View;
-import posweb.atividade01.pojos.Aluno;
+import posweb.atividade01.services.AlunoServices;
 
 public class ListarAlunosView implements View{
+	
+	AlunoServices alunoServices = new AlunoServices();
+	
 	@Override
 	public void generate() {
-		String listaAlunosToString = "";
-		
-		List<Aluno> alunos = AlunoCRUD.listar();
-		for (int i=0; i<alunos.size(); i++) {
-			listaAlunosToString += (i!=0 ? "\n" : "");
-			listaAlunosToString += alunos.get(i).toString();
-		}
-		
+		String listaAlunosToString = alunoServices.listar();
 		JOptionPane.showMessageDialog(null, listaAlunosToString);
 	}
 }

@@ -5,17 +5,18 @@ import posweb.atividade01.views.*;
 
 public class ViewFactory {
 
-	public static final String ADD_CURSO 				= "1";
-	public static final String LIST_CURSOS 				= "2";
-	public static final String GET_CURSOS 				= "3";
-	public static final String ADD_DISCIPLINA 			= "4";
-	public static final String LIST_DISCIPLINAS			= "5";
-	public static final String INCLUIR_DISCIPLINA_CURSO	= "6";
-	public static final String ADD_ALUNO 				= "7";
-	public static final String LIST_ALUNOS				= "8";
-	public static final String INCLUIR_ALUNO_CURSO		= "9";
-	public static final String INCLUIR_ALUNO_DISCIPLINA = "10";
-	public static final String FECHAR 					= "99";
+	public static final String ADD_CURSO 						= "1";
+	public static final String LIST_CURSOS 						= "2";
+	public static final String GET_CURSOS 						= "3";
+	public static final String ADD_DISCIPLINA 					= "4";
+	public static final String LIST_DISCIPLINAS					= "5";
+	public static final String INCLUIR_DISCIPLINA_CURSO			= "6";
+	public static final String ADD_ALUNO 						= "7";
+	public static final String LIST_ALUNOS						= "8";
+	public static final String INCLUIR_ALUNO_CURSO				= "9";
+	public static final String INCLUIR_ALUNO_DISCIPLINA 		= "10";
+	public static final String LISTAR_DISCIPLINAS_NAO_CONCLUIDAS = "11";
+	public static final String FECHAR 							= "99";
 	
 	
 	public static View create(String opcao) {
@@ -51,6 +52,9 @@ public class ViewFactory {
 				break;
 			case INCLUIR_ALUNO_DISCIPLINA:
 				view = new IncluirAlunoDisciplinaView();
+				break;	
+			case LISTAR_DISCIPLINAS_NAO_CONCLUIDAS:
+				view = new ListarDisciplinasNaoConcluidasView();
 				break;	
 			case FECHAR:
 				System.exit(0);

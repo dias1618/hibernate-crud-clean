@@ -1,4 +1,4 @@
-package posweb.atividade01.daos;
+package posweb.atividade01.cruds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,34 +103,4 @@ public class AlunoCRUD {
 		}		
 	}
 
-	public static String addCurso(int cursoId, int alunoId) {
-		Session session = SessionHibernate.getInstance().openSession();
-		Transaction tx = null;
-		  
-		try {
-		   tx = session.beginTransaction();
-		   Curso curso = (Curso)session.get(Curso.class, cursoId);
-		   if(curso == null) {
-			   return "Curso não encontrado";
-		   }
-		   Aluno aluno = (Aluno)session.get(Aluno.class, alunoId);
-		   if(aluno == null) {
-			   return "Aluno não encontrada";
-		   }
-		   
-		   aluno.setCurso(curso);
-		   
-		   session.save(aluno);
-		   
-		   tx.commit();
-		   
-		   return "Aluno adicionada com sucesso";
-		} catch (HibernateException e) {
-		   if (tx!=null) tx.rollback();
-		   e.printStackTrace(); 
-		   return "Erro ao adicionar aluno";
-		} finally {
-		   session.close(); 
-		}
-	}
 }

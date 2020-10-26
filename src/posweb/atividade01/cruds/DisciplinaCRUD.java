@@ -1,4 +1,4 @@
-package posweb.atividade01.daos;
+package posweb.atividade01.cruds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,10 @@ import java.util.List;
 import org.hibernate.*;
 
 import posweb.atividade01.SessionHibernate;
+import posweb.atividade01.enums.SituacaoDisciplinaEnum;
 import posweb.atividade01.pojos.Aluno;
+import posweb.atividade01.pojos.AlunoDisciplina;
+import posweb.atividade01.pojos.Curso;
 import posweb.atividade01.pojos.Disciplina;
 
 public class DisciplinaCRUD {
@@ -69,7 +72,7 @@ public class DisciplinaCRUD {
 		  
 		try {
 		   tx = session.beginTransaction();
-		   List<Disciplina> disciplinas = session.createQuery("FROM Disciplina d LEFT OUTER JOIN FETCH d.alunos ad LEFT OUTER JOIN FETCH ad.aluno", Disciplina.class).list(); 
+		   List<Disciplina> disciplinas = session.createQuery("FROM Disciplina", Disciplina.class).list(); 
 		   tx.commit();
 		   
 		   return disciplinas;
@@ -80,6 +83,35 @@ public class DisciplinaCRUD {
 		} finally {
 		   session.close(); 
 		}
+	}
+	
+	public static List<AlunoDisciplina> listarNaoConcluidas(Integer idAluno) {
+		Session session = SessionHibernate.getInstance().openSession();
+		Transaction tx = null;
+		try {
+		   tx = session.beginTransaction();
+		   Query<AlunoDisciplina> query = session.createQuery(
+				   "FROM AlunoDisciplina ad "
+				   + " WHERE ad.aluno.id =:idAluno"
+				   + "   AND ad.situacao IN (:tiposSituacao)", AlunoDisciplina.class);
+		   query.setParameter("idAluno", idAluno);
+		   query.setParameter("tiposSituacao", getTiposSituacaoNaoConcluidos());
+		   tx.commit();
+		   return (List<AlunoDisciplina>) query.getResultList();
+		} catch (HibernateException e) {
+		   if (tx!=null) tx.rollback();
+		   e.printStackTrace(); 
+		   return new ArrayList<AlunoDisciplina>();
+		} finally {
+		   session.close(); 
+		}
+	}
+	
+	private static List<Integer> getTiposSituacaoNaoConcluidos(){
+		List<Integer> tipos = new ArrayList<Integer>();
+		tipos.add(SituacaoDisciplinaEnum.EM_CURSO.getKey());
+		tipos.add(SituacaoDisciplinaEnum.TRANCADO.getKey());
+		return tipos;
 	}
 	
 	public static Disciplina buscar(int disciplinaId) {

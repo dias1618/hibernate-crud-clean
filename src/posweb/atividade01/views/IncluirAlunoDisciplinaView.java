@@ -2,16 +2,18 @@ package posweb.atividade01.views;
 
 import javax.swing.JOptionPane;
 
-import posweb.atividade01.daos.DisciplinaCRUD;
+import posweb.atividade01.cruds.DisciplinaCRUD;
 import posweb.atividade01.interfaces.View;
 import posweb.atividade01.services.DisciplinaServices;
 
 public class IncluirAlunoDisciplinaView implements View{
+	
+	DisciplinaServices disciplinaServices = new DisciplinaServices();
+	
+	
 	@Override
 	public void generate() {
 		try {
-			DisciplinaServices disciplinaServices = new DisciplinaServices();
-			
 			String idDisciplina	= JOptionPane.showInputDialog("Digite o id do Disciplina");
 			String idAluno = JOptionPane.showInputDialog("Digite o id do aluno");
 			String semestre = JOptionPane.showInputDialog("Digite o semestre no formato yyyyn, onde yyyy é o ano e n representa o semestre (1 ou 2)");

@@ -1,4 +1,4 @@
-package posweb.atividade01.daos;
+package posweb.atividade01.cruds;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;

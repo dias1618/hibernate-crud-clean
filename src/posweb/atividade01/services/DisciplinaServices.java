@@ -1,19 +1,35 @@
 package posweb.atividade01.services;
 
-import posweb.atividade01.daos.AlunoCRUD;
-import posweb.atividade01.daos.AlunoDisciplinaCRUD;
-import posweb.atividade01.daos.CursoCRUD;
-import posweb.atividade01.daos.DisciplinaCRUD;
+import java.util.List;
+
+import posweb.atividade01.cruds.AlunoDisciplinaCRUD;
+import posweb.atividade01.cruds.CursoCRUD;
+import posweb.atividade01.cruds.DisciplinaCRUD;
 import posweb.atividade01.enums.SituacaoDisciplinaEnum;
 import posweb.atividade01.pojos.Aluno;
 import posweb.atividade01.pojos.AlunoDisciplina;
+import posweb.atividade01.pojos.Curso;
 import posweb.atividade01.pojos.Disciplina;
 
 public class DisciplinaServices {
 
+	AlunoServices alunoServices = new AlunoServices();
+	
+	public String salvar(Disciplina disciplina) throws Exception{
+		validarNomeDisciplina(disciplina.getNome());
+		DisciplinaCRUD.salvar(disciplina);
+		return "Disciplina salvo com sucesso";
+	}
+
+	private void validarNomeDisciplina(String nome) throws Exception {
+		if(nome == null || nome.trim().equals("")) {
+			throw new Exception("Nome do disciplina não pode ser vazio");
+		}
+	}
+	
 	public String addAluno(String idDisciplina, String idAluno, String semestre, String situacao) throws Exception {
 		Disciplina disciplina = verificarDisciplina(idDisciplina);
-		Aluno aluno = verificarAluno(idAluno);
+		Aluno aluno = alunoServices.verificarAluno(idAluno);
 		verificarCursoAluno(aluno.getCurso().getId(), disciplina.getId());
 		verificarSemestre(semestre);
 		Integer tipoSituacao = verificarSituacao(situacao);
@@ -23,7 +39,7 @@ public class DisciplinaServices {
 		return "Aluno adicionado com sucesso";
 	}
 	
-	private Disciplina verificarDisciplina(String idDisciplina) throws Exception{
+	public Disciplina verificarDisciplina(String idDisciplina) throws Exception{
 		try {
 			Integer id = Integer.parseInt(idDisciplina);
 			Disciplina disciplina = DisciplinaCRUD.buscar(id);
@@ -37,22 +53,16 @@ public class DisciplinaServices {
 		}
 	}
 	
-	private Aluno verificarAluno(String idAluno) throws Exception{
-		try {
-			Integer id = Integer.parseInt(idAluno);
-			Aluno aluno = AlunoCRUD.buscar(id);
-			if(aluno == null) {
-				throw new Exception("Aluno não encontrada");
-			}
-			return aluno;
-		}
-		catch(NumberFormatException nfe) {
-			throw new Exception("Formato do id do aluno está incorreto");
-		}
-	}
-	
 	private void verificarCursoAluno(Integer idCurso, Integer idDisciplina) throws Exception {
-		if(!CursoCRUD.cursoHasDisciplina(idCurso, idDisciplina)) {
+		boolean alunoPertenceAoCurso = false;
+		Curso curso = CursoCRUD.buscar(idCurso);
+		for(Disciplina disciplina : curso.getDisciplinas()) {
+			if(disciplina.getId() == idDisciplina) {
+				alunoPertenceAoCurso = true;
+			}
+		}
+		
+		if(alunoPertenceAoCurso) {
 			throw new Exception("A Disciplina não está vinculada ao curso do aluno");
 		}
 	}
@@ -105,4 +115,27 @@ public class DisciplinaServices {
 			throw new Exception("Aluno já cadastrado na disciplina");
 	}
 	
+	public String listar() {
+		String listaDisciplinas = "";
+		
+		List<Disciplina> disciplinas = DisciplinaCRUD.listar();
+		for (int i=0; i<disciplinas.size(); i++) {
+			listaDisciplinas += (i!=0 ? "\n" : "");
+			listaDisciplinas += disciplinas.get(i).toString();
+		}
+		
+		return listaDisciplinas;
+	}
+
+	public String listarNaoConcluidas(String idAluno) throws Exception{
+		String listaDisciplinas = "";
+		Aluno aluno = alunoServices.verificarAluno(idAluno);
+		List<AlunoDisciplina> alunoDisciplinas = DisciplinaCRUD.listarNaoConcluidas(aluno.getId());
+		for (int i=0; i<alunoDisciplinas.size(); i++) {
+			listaDisciplinas += (i!=0 ? "\n" : "");
+			listaDisciplinas += alunoDisciplinas.get(i).getSemestre() + " - " + alunoDisciplinas.get(i).getDisciplina().getNome();
+		}
+		
+		return "O aluno " + aluno.getNome() + " possui os seguintes semestres/disciplinas não concluídos:\n" + listaDisciplinas;
+	}
 }

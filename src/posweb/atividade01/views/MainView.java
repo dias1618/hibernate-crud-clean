@@ -24,6 +24,7 @@ public class MainView implements View{
 					"8 	- Listas todos os alunos\n"+
 					"9 	- Incluir aluno em curso\n"+
 					"10	- Incluir aluno em disciplina\n"+
+					"11	- Listar disciplinas não concluídas\n"+
 					"99 - Fechar\n"
 			);
 			if(opcao == null)
